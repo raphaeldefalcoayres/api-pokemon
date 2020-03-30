@@ -170,7 +170,9 @@ class GenerateController {
         base_experience: data.base_experience,
         color: specie.data.color ? specie.data.color.name : null,
         evolves_from_species,
-        types: data.types,
+        types:
+          data.types[0].type.name +
+          (data.types[1] ? ',' + data.types[1].type.name : ''),
         species: data.species,
         habitat: specie.data.habitat
           ? specie.data.habitat.name
