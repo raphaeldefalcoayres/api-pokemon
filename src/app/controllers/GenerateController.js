@@ -17,11 +17,36 @@ class GenerateController {
         data: { results },
       } = await api('pokemon-color');
 
-      const colors = results.map(color => color.name);
+      const colors = results.map(item => item.name);
 
       saveJson(colors, 'db-colors');
 
       return res.json(colors);
+    } catch (err) {
+      return res.status(400).json({ message: 'error', err });
+    }
+  }
+
+  async getColorsDash(req, res) {
+    try {
+      let colorsDash = {};
+
+      const pokemons = JSON.parse(
+        fs.readFileSync('db-pokemons-complete.json', 'utf8')
+      );
+
+      pokemons.forEach(pokemon => {
+        colorsDash = {
+          ...colorsDash,
+          [pokemon.color]: colorsDash[pokemon.color]
+            ? (colorsDash[pokemon.color] += 1)
+            : 1,
+        };
+      });
+
+      saveJson(colorsDash, 'db-colorsDash');
+
+      return res.json(colorsDash);
     } catch (err) {
       return res.status(400).json({ message: 'error', err });
     }
@@ -33,11 +58,36 @@ class GenerateController {
         data: { results },
       } = await api('pokemon-habitat');
 
-      const habitats = results.map(color => color.name);
+      const habitats = results.map(item => item.name);
 
       saveJson(habitats, 'db-habitats');
 
       return res.json(habitats);
+    } catch (err) {
+      return res.status(400).json({ message: 'error', err });
+    }
+  }
+
+  async getHabitatsDash(req, res) {
+    try {
+      let habitatsDash = {};
+
+      const pokemons = JSON.parse(
+        fs.readFileSync('db-pokemons-complete.json', 'utf8')
+      );
+
+      pokemons.forEach(pokemon => {
+        habitatsDash = {
+          ...habitatsDash,
+          [pokemon.habitat]: habitatsDash[pokemon.habitat]
+            ? (habitatsDash[pokemon.habitat] += 1)
+            : 1,
+        };
+      });
+
+      saveJson(habitatsDash, 'db-habitatsDash');
+
+      return res.json(habitatsDash);
     } catch (err) {
       return res.status(400).json({ message: 'error', err });
     }
@@ -49,11 +99,38 @@ class GenerateController {
         data: { results },
       } = await api('type');
 
-      const types = results.map(color => color.name);
+      const types = results.map(item => item.name);
 
       saveJson(types, 'db-types');
 
       return res.json(types);
+    } catch (err) {
+      return res.status(400).json({ message: 'error', err });
+    }
+  }
+
+  async getTypesDash(req, res) {
+    try {
+      let typesDash = {};
+
+      const pokemons = JSON.parse(
+        fs.readFileSync('db-pokemons-complete.json', 'utf8')
+      );
+
+      pokemons.forEach(pokemon => {
+        pokemon.types.forEach(t => {
+          typesDash = {
+            ...typesDash,
+            [t.type.name]: typesDash[t.type.name]
+              ? (typesDash[t.type.name] += 1)
+              : 1,
+          };
+        });
+      });
+
+      saveJson(typesDash, 'db-typesDash');
+
+      return res.json(typesDash);
     } catch (err) {
       return res.status(400).json({ message: 'error', err });
     }
@@ -114,16 +191,18 @@ class GenerateController {
   }
 
   async joinAllData(req, res) {
-    const colors = JSON.parse(fs.readFileSync('db-colors.json', 'utf8'));
-    const types = JSON.parse(fs.readFileSync('db-types.json', 'utf8'));
-    const habitats = JSON.parse(fs.readFileSync('db-habitats.json', 'utf8'));
+    const colors = JSON.parse(fs.readFileSync('db-colorsDash.json', 'utf8'));
+    const types = JSON.parse(fs.readFileSync('db-typesDash.json', 'utf8'));
+    const habitats = JSON.parse(
+      fs.readFileSync('db-habitatsDash.json', 'utf8')
+    );
     const pokemons = JSON.parse(
       fs.readFileSync('db-pokemons-complete.json', 'utf8')
     );
 
     saveJson({ colors, types, habitats, pokemons }, 'db');
 
-    return res.json({ join: success });
+    return res.json({ join: 'success' });
   }
 }
 
