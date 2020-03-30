@@ -194,10 +194,12 @@ class GenerateController {
     chunks(pokemons, fetchDatas, 50).then(response => {
       const t1 = Date.now();
       console.log(`Fetch time: ${t1 - t0} ms`);
-      saveJson(
-        response.filter(pokemon => pokemon.evolves_from_species === false),
-        'db-pokemons-complete'
+
+      const results = response.filter(
+        pokemon => pokemon.evolves_from_species === false
       );
+
+      saveJson({ results, total: results.length }, 'db-pokemons-complete');
       res.json(response);
     });
   }
