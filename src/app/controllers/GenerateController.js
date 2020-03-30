@@ -118,14 +118,21 @@ class GenerateController {
       );
 
       pokemons.forEach(pokemon => {
-        pokemon.types.forEach(t => {
+        if (pokemon.types.split(',').length > 1) {
+          pokemon.types.split(',').forEach(type => {
+            typesDash = {
+              ...typesDash,
+              [type]: typesDash[type] ? (typesDash[type] += 1) : 1,
+            };
+          });
+        } else {
           typesDash = {
             ...typesDash,
-            [t.type.name]: typesDash[t.type.name]
-              ? (typesDash[t.type.name] += 1)
+            [pokemon.types]: typesDash[pokemon.types]
+              ? (typesDash[pokemon.types] += 1)
               : 1,
           };
-        });
+        }
       });
 
       saveJson(typesDash, 'db-typesDash');
