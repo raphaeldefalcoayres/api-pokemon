@@ -165,11 +165,20 @@ class GenerateController {
       const evolutionArray = await evolutionArrayGenerate(evolution.data);
       const evolves_from_species = !!specie.data.evolves_from_species;
 
+      const id = pad(
+        data.species.url
+          .replace('https://pokeapi.co/api/v2/pokemon-species/', '')
+          .replace('/', ''),
+        3
+      );
+
+      console.log('id', id);
+
       return {
-        id: data.id,
+        id,
         name: data.name,
         img: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pad(
-          data.id,
+          id,
           3
         )}.png`,
         weight: data.weight,
