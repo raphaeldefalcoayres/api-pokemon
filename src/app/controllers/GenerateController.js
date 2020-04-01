@@ -1,4 +1,4 @@
-import api from '../../services/api';
+import api from '../../lib/api';
 
 import * as fs from 'fs';
 
