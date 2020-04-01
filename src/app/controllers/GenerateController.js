@@ -194,6 +194,7 @@ class GenerateController {
           ? specie.data.habitat.name
           : 'without-habitat',
         evolution: evolutionArray,
+        stats: data.stats,
       };
     };
 
